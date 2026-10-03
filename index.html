@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ishbop — frilanserlar va buyurtmalar bozori</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F3F6FB;--card:#fff;--ink:#101828;--mute:#5B6478;--blue:#2D3BFF;--sun:#FFC83D;--mint:#1FB57F;--line:#DCE2EE}
+*{box-sizing:border-box;margin:0}
+body{font-family:Manrope,system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.55}
+h1,h2,h3,.logo{font-family:Unbounded,Manrope,sans-serif;font-weight:700;line-height:1.15}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+header{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+.logo{font-size:22px}.logo i{font-style:normal;background:var(--sun);padding:0 6px;border-radius:6px}
+nav{display:flex;gap:22px;align-items:center;font-weight:600}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:800;padding:12px 20px;border-radius:999px;background:var(--blue);color:#fff}
+.btn.alt{background:var(--ink)}
+.btn:hover{filter:brightness(1.12)}
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;padding:40px 0 56px}
+h1{font-size:clamp(32px,5vw,56px)}
+.hero p{color:var(--mute);margin:18px 0 26px;max-width:46ch;font-size:18px}
+.search{display:flex;gap:8px;background:var(--card);padding:8px;border-radius:999px;border:2px solid var(--ink);max-width:520px}
+.search input{flex:1;border:0;padding:0 14px;font:inherit;background:none;min-width:0}
+.search input:focus{outline:none}
+.live{position:relative;height:300px}
+.live .tag{position:absolute;top:-6px;left:0;background:var(--mint);color:#fff;font-weight:800;font-size:13px;padding:4px 12px;border-radius:999px;z-index:3}
+.live .tag::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#fff;margin-right:7px;animation:blink 1.2s infinite}
+@keyframes blink{50%{opacity:.2}}
+.lc{position:absolute;left:0;right:0;background:var(--card);border:2px solid var(--ink);border-radius:18px;padding:16px 18px;transition:transform .6s,opacity .6s;box-shadow:6px 6px 0 var(--ink)}
+.lc b{display:block;font-size:15px}.lc span{color:var(--mute);font-size:14px}
+.lc em{float:right;font-style:normal;font-weight:800;color:var(--blue)}
+.lc[data-p="0"]{transform:translateY(34px);z-index:2}
+.lc[data-p="1"]{transform:translateY(122px) scale(.96);opacity:.75;z-index:1}
+.lc[data-p="2"]{transform:translateY(196px) scale(.92);opacity:.4}
+.lc[data-p="3"]{transform:translateY(0) scale(.9);opacity:0}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+.chip{border:2px solid var(--ink);background:var(--card);padding:8px 16px;border-radius:999px;font:inherit;font-weight:600;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--sun)}
+h2{font-size:26px;margin-bottom:20px}
+.jobs{display:grid;gap:14px}
+.job{display:grid;grid-template-columns:1fr auto;gap:8px 20px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+.job:hover{border-color:var(--blue)}
+.job h3{font-size:17px}
+.job p{color:var(--mute);margin:6px 0 10px;max-width:70ch}
+.skills{display:flex;gap:6px;flex-wrap:wrap}
+.skills span{background:var(--paper);padding:3px 10px;border-radius:8px;font-size:13px;font-weight:600}
+.side{text-align:right;display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:10px}
+.price{font-weight:800;font-size:19px}.meta{color:var(--mute);font-size:13px}
+.empty{padding:30px;text-align:center;color:var(--mute);background:var(--card);border-radius:16px;border:1px dashed var(--line)}
+.people{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:56px 0}
+.pr{background:var(--ink);color:#fff;border-radius:20px;padding:24px}
+.pr .av{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-family:Unbounded;font-weight:700;color:var(--ink);margin-bottom:14px}
+.pr small{color:#B8C0D4;display:block;margin:4px 0 12px}
+.pr .rate{color:var(--sun);font-weight:800}
+footer{border-top:1px solid var(--line);padding:26px 0;color:var(--mute);font-size:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+dialog{border:2px solid var(--ink);border-radius:20px;padding:26px;width:min(440px,92vw);box-shadow:8px 8px 0 var(--ink)}
+dialog::backdrop{background:rgba(16,24,40,.55)}
+dialog label{display:block;font-weight:600;margin:14px 0 6px}
+dialog input,dialog textarea{width:100%;font:inherit;padding:10px 12px;border:2px solid var(--line);border-radius:12px}
+dialog .row{display:flex;gap:10px;margin-top:20px;justify-content:flex-end}
+#toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,100px);background:var(--mint);color:#fff;font-weight:800;padding:12px 22px;border-radius:999px;transition:transform .35s}
+#toast.on{transform:translate(-50%,0)}
+@media(max-width:820px){.hero{grid-template-columns:1fr}.live{height:260px}.people{grid-template-columns:1fr}nav a{display:none}.job{grid-template-columns:1fr}.side{align-items:flex-start;text-align:left}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <a class="logo" href="#">Ish<i>bop</i></a>
+  <nav><a href="#jobs">Buyurtmalar</a><a href="#people">Mutaxassislar</a><button class="btn alt" onclick="toast('Tez orada: kirish sahifasi')">Kirish</button></nav>
+</header>
+
+<section class="hero">
+  <div>
+    <h1>Ishingizga mos mutaxassis — bugunoq.</h1>
+    <p>Dasturchi, dizayner, tarjimon yoki montajchi kerakmi? Buyurtma joylang, takliflarni oling va eng yaxshisini tanlang.</p>
+    <form class="search" id="heroSearch" role="search">
+      <input id="q" type="search" placeholder="Masalan: Telegram bot" aria-label="Buyurtmalarni qidirish">
+      <button class="btn" type="submit">Qidirish</button>
+    </form>
+  </div>
+  <div class="live" aria-hidden="true">
+    <span class="tag">Hozir joylandi</span>
+    <div id="feed"></div>
+  </div>
+</section>
+
+<section id="jobs">
+  <h2>Ochiq buyurtmalar</h2>
+  <div class="chips" id="chips"></div>
+  <div class="jobs" id="list"></div>
+</section>
+
+<section id="people">
+  <div class="people" id="ppl"></div>
+</section>
+
+<footer><span>© 2026 Ishbop. Namuna loyiha.</span><span>Toshkent, Oʻzbekiston</span></footer>
+</div>
+
+<dialog id="dlg">
+  <h3 id="dTitle" style="font-size:18px"></h3>
+  <label for="dPrice">Narxingiz (soʻm)</label>
+  <input id="dPrice" type="number" min="1" placeholder="1 500 000">
+  <label for="dMsg">Nega aynan siz?</label>
+  <textarea id="dMsg" rows="3" placeholder="Qisqacha tajribangiz haqida yozing"></textarea>
+  <div class="row"><button class="chip" id="dNo">Bekor qilish</button><button class="btn" id="dYes">Taklif yuborish</button></div>
+</dialog>
+<div id="toast" role="status"></div>
+
+<script>
+const JOBS=[
+{t:"Telegram doʻkon boti yaratish",c:"Dasturlash",p:2500000,d:"Mahsulot katalogi, savat va Click orqali toʻlov. Python (aiogram) afzal.",s:["Python","aiogram","Click"],w:"2 soat oldin",n:7},
+{t:"Oshxona uchun logotip va brend uslubi",c:"Dizayn",p:1200000,d:"Samarqand oshxonasi uchun logotip, ranglar palitrasi va menyu dizayni.",s:["Figma","Illustrator"],w:"5 soat oldin",n:12},
+{t:"Ingliz tilidan oʻzbekchaga 40 sahifa tarjima",c:"Tarjima",p:900000,d:"Texnik qoʻllanma. Muddat — 7 kun. Terminologiyaga eʼtibor bering.",s:["Tarjima","Tahrir"],w:"Kecha",n:4},
+{t:"Instagram uchun 12 ta Reels montaji",c:"Video",p:1800000,d:"Tayyor kadrlar bor. Titr, musiqa va tezkor montaj kerak.",s:["Premiere","CapCut"],w:"Kecha",n:9},
+{t:"Onlayn kurs uchun landing sahifa",c:"Dasturlash",p:3200000,d:"Moslashuvchan sahifa, roʻyxatdan oʻtish formasi va Telegramga xabar yuborish.",s:["HTML","CSS","JavaScript"],w:"2 kun oldin",n:15},
+{t:"Kichik biznes uchun SMM reja (1 oy)",c:"Marketing",p:1500000,d:"Kontent-reja, 20 ta post gʻoyasi va reklamani sozlash.",s:["SMM","Targeting"],w:"3 kun oldin",n:6}
+];
+const PPL=[
+{n:"Dilnoza K.",r:"Veb-dizayner",x:"4.9",$:"120 000 soʻm/soat",c:"#FFC83D"},
+{n:"Jasur A.",r:"Python dasturchi",x:"5.0",$:"150 000 soʻm/soat",c:"#7BE0B5"},
+{n:"Madina R.",r:"Tarjimon (EN–UZ–RU)",x:"4.8",$:"80 000 soʻm/soat",c:"#A9B1FF"}
+];
+const CATS=["Hammasi","Dasturlash","Dizayn","Tarjima","Video","Marketing"];
+let cat="Hammasi",q="";
+const $=id=>document.getElementById(id);
+const fmt=n=>n.toLocaleString("ru-RU")+" soʻm";
+const esc=s=>s.replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+
+function chips(){$("chips").innerHTML=CATS.map(c=>`<button class="chip" aria-pressed="${c===cat}" data-c="${c}">${c}</button>`).join("")}
+function list(){
+  const r=JOBS.map((j,i)=>({j,i})).filter(({j})=>(cat==="Hammasi"||j.c===cat)&&(j.t+j.d+j.s.join(" ")).toLowerCase().includes(q.toLowerCase()));
+  $("list").innerHTML=r.length?r.map(({j,i})=>`<article class="job"><div><h3>${esc(j.t)}</h3><p>${esc(j.d)}</p><div class="skills">${j.s.map(s=>`<span>${esc(s)}</span>`).join("")}</div></div><div class="side"><div><div class="price">${fmt(j.p)}</div><div class="meta">${j.w} · ${j.n} ta taklif</div></div><button class="btn" data-i="${i}">Taklif berish</button></div></article>`).join("")
+  :`<div class="empty">Hech narsa topilmadi. Boshqa soʻz yoki turkumni sinab koʻring.</div>`;
+}
+$("chips").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;cat=b.dataset.c;chips();list()};
+$("heroSearch").onsubmit=e=>{e.preventDefault();q=$("q").value.trim();list();$("jobs").scrollIntoView({behavior:"smooth"})};
+
+let cur=null;
+$("list").onclick=e=>{const b=e.target.closest("[data-i]");if(!b)return;cur=JOBS[b.dataset.i];$("dTitle").textContent=cur.t;$("dlg").showModal()};
+$("dNo").onclick=()=>$("dlg").close();
+$("dYes").onclick=()=>{
+  const p=+$("dPrice").value;
+  if(!p){$("dPrice").focus();return toast("Narxni kiriting")}
+  cur.n++;list();$("dlg").close();$("dPrice").value=$("dMsg").value="";toast("Taklif yuborildi")
+};
+
+$("ppl").innerHTML=PPL.map(p=>`<div class="pr"><div class="av" style="background:${p.c}">${p.n[0]}</div><h3 style="font-size:17px">${p.n}</h3><small>${p.r}</small><div class="rate">★ ${p.x} · ${p.$}</div></div>`).join("");
+
+let tm;function toast(m){const t=$("toast");t.textContent=m;t.classList.add("on");clearTimeout(tm);tm=setTimeout(()=>t.classList.remove("on"),2200)}
+
+// "Hozir joylandi" lenta
+const FEED=[["Sayt uchun chatbot","3 000 000"],["Poster dizayni","400 000"],["Excel hisobot avtomatlashtirish","900 000"],["Podkast montaji","700 000"],["Mobil ilova ikonkasi","350 000"]];
+let k=0;const fe=$("feed");
+function card(i){const f=FEED[i%FEED.length];return `<div class="lc"><em>${f[1]} soʻm</em><b>${f[0]}</b><span>Hozirgina joylandi</span></div>`}
+function setP(){[...fe.children].forEach((el,i)=>el.dataset.p=(i-k%fe.children.length+fe.children.length)%fe.children.length)}
+fe.innerHTML=[0,1,2,3].map(card).join("");setP();
+setInterval(()=>{k++;const n=fe.children.length;const el=fe.children[(k-1)%n];const f=FEED[(k+3)%FEED.length];el.querySelector("b").textContent=f[0];el.querySelector("em").textContent=f[1]+" soʻm";setP()},2800);
+
+chips();list();
+</script>
+</body>
+</html>
